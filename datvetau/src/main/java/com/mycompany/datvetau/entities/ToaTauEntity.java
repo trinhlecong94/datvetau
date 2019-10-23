@@ -1,10 +1,11 @@
 package com.mycompany.datvetau.entities;
 
 import com.mycompany.datvetau.entities.enums.TrainClasses;
-import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,21 +14,21 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
-public class TauEntity implements Serializable {
+public class ToaTauEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false)
-    private String tenTau;
+    @Enumerated(EnumType.STRING)
+    private TrainClasses status = TrainClasses.CLASSES01;
 
     @OneToMany
     @Column(nullable = false)
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<ToaTauEntity> toaTaus;
+    private List<GheNgoiEntity> gheNgoiEntitys;
 
-    public TauEntity() {
+    public ToaTauEntity() {
     }
 
     public int getId() {
@@ -38,19 +39,20 @@ public class TauEntity implements Serializable {
         this.id = id;
     }
 
-    public String getTenTau() {
-        return tenTau;
+    public TrainClasses getStatus() {
+        return status;
     }
 
-    public void setTenTau(String tenTau) {
-        this.tenTau = tenTau;
+    public void setStatus(TrainClasses status) {
+        this.status = status;
     }
 
-    public List<ToaTauEntity> getToaTaus() {
-        return toaTaus;
+    public List<GheNgoiEntity> getGheNgoiEntitys() {
+        return gheNgoiEntitys;
     }
 
-    public void setToaTaus(List<ToaTauEntity> toaTaus) {
-        this.toaTaus = toaTaus;
+    public void setGheNgoiEntitys(List<GheNgoiEntity> gheNgoiEntitys) {
+        this.gheNgoiEntitys = gheNgoiEntitys;
     }
+    
 }

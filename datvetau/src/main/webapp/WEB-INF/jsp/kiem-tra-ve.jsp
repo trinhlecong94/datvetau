@@ -15,21 +15,36 @@
                     <div class="col-sm">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Mã vé</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nhập mã vé bao gồm 8 hoặc 9 số">
+                            <input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nhập mã vé bao gồm 8 hoặc 9 số">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Ga đến</label>
-                            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Nhập mã ga đến">
+                            <input class="form-control" list="browsers" name="browser">
+                            <datalist id="browsers">
+                                <c:forEach var="ga" items="${nhaGa}">
+                                    <option value="${ga.tenNhaGa}"> 
+                                    </c:forEach>
+                            </datalist>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Ga đi</label>
-                            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Nhập mã ga đi">
+                            <input class="form-control" list="browsers2" name="browser2">
+                            <datalist id="browsers2">
+                                <c:forEach var="ga" items="${nhaGa}">
+                                    <option value="${ga.tenNhaGa}"> 
+                                    </c:forEach>
+                            </datalist>
                         </div>
                     </div>
                     <div class="col-sm">
                         <div class="form-group">
                             <label for="exampleInputPassword1">Mác Tàu</label>
-                            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Nhập Mác Tàu Ví dụ SE1, TN1, SE2, SE6">
+                            <input class="form-control" list="browsers3" name="browser3">
+                            <datalist id="browsers3">
+                                <c:forEach var="tau" items="${tau}">
+                                    <option value="${tau.tenTau}"> 
+                                    </c:forEach>
+                            </datalist>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Ngày đi</label>

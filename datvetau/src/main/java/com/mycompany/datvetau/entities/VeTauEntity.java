@@ -1,4 +1,3 @@
-// ok
 package com.mycompany.datvetau.entities;
 
 import java.io.Serializable;
@@ -11,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,13 +24,17 @@ public class VeTauEntity implements Serializable {
     @Column(nullable = false)
     private String maSo;
 
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
+    @DateTimeFormat(pattern = "yyyy-mm-dd hh.mm.ss ")
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
     private Date ngayKhoiHanh;
 
+    private String tenKhachHang;
+
+    private String maSoNhanThan;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false ,insertable = false, updatable = false)
+    @JoinColumn(nullable = false, insertable = false, updatable = false)
     private NhaGaEntity gaKhoiHanh;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,17 +43,13 @@ public class VeTauEntity implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
-    private TauEntity tau;
- 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
     private GheNgoiEntity gheNgoi;
 
     public VeTauEntity() {
     }
 
     public int getId() {
-        
+
         return id;
     }
 
@@ -91,20 +89,28 @@ public class VeTauEntity implements Serializable {
         this.gaDen = gaDen;
     }
 
-    public TauEntity getTau() {
-        return tau;
-    }
-
-    public void setTau(TauEntity tau) {
-        this.tau = tau;
-    }
-
     public GheNgoiEntity getGheNgoi() {
         return gheNgoi;
     }
 
     public void setGheNgoi(GheNgoiEntity gheNgoi) {
         this.gheNgoi = gheNgoi;
+    }
+
+    public String getTenKhachHang() {
+        return tenKhachHang;
+    }
+
+    public void setTenKhachHang(String tenKhachHang) {
+        this.tenKhachHang = tenKhachHang;
+    }
+
+    public String getMaSoNhanThan() {
+        return maSoNhanThan;
+    }
+
+    public void setMaSoNhanThan(String maSoNhanThan) {
+        this.maSoNhanThan = maSoNhanThan;
     }
 
 }

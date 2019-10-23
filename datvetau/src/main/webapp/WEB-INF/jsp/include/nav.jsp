@@ -11,9 +11,6 @@
                 <a class="nav-link" href="trang-chu">Tìm Vé <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="thong-tin-dat-cho">Thông Tin Đặt Chỗ</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="kiem-tra-ve">Kiểm Tra Vé</a>
             </li>
             <li class="nav-item">
