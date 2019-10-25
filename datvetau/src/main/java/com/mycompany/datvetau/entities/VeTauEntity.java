@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -33,15 +35,18 @@ public class VeTauEntity implements Serializable {
 
     private String maSoNhanThan;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
+    @LazyCollection(LazyCollectionOption.FALSE)
     @JoinColumn(nullable = false, insertable = false, updatable = false)
     private NhaGaEntity gaKhoiHanh;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
+    @LazyCollection(LazyCollectionOption.FALSE)
     @JoinColumn(nullable = false, insertable = false, updatable = false)
     private NhaGaEntity gaDen;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
+    @LazyCollection(LazyCollectionOption.FALSE)
     @JoinColumn(nullable = false)
     private GheNgoiEntity gheNgoi;
 

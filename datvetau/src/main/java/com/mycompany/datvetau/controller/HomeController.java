@@ -3,9 +3,11 @@ package com.mycompany.datvetau.controller;
 import com.mycompany.datvetau.entities.LichTrinhEntity;
 import com.mycompany.datvetau.entities.NhaGaEntity;
 import com.mycompany.datvetau.entities.TauEntity;
+import com.mycompany.datvetau.entities.VeTauEntity;
 import com.mycompany.datvetau.service.LichTrinhService;
 import com.mycompany.datvetau.service.NhaGaService;
 import com.mycompany.datvetau.service.TauService;
+import com.mycompany.datvetau.service.VeTauService;
 import static java.lang.Integer.max;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +35,33 @@ public class HomeController {
     @Autowired
     private NhaGaService nhaGaService;
 
+    @Autowired
+    private VeTauService veTauService;
+
     @RequestMapping(value = {"/", "/trang-chu"}, method = RequestMethod.GET)
     public String homePage(Model model) {
+        List<NhaGaEntity> nhaGa = nhaGaService.getNhaGas();
+        model.addAttribute("nhaGa", nhaGa);
         return "trang-chu";
+    }
+
+    @RequestMapping(value = {"/chon-ve"}, method = RequestMethod.GET)
+    public String homeChonVe(Model model,
+            @RequestParam("loaiVe") String loaiVe,
+            @RequestParam("gaDi") String gaDi,
+            @RequestParam("gaDen") String gaDen,
+            @RequestParam("ngayDi") String ngayDi,
+            @RequestParam("ngayVe") String ngayDen) {
+
+        model.addAttribute("loaiVe", loaiVe);
+        model.addAttribute("gaDi", gaDi);
+        model.addAttribute("gaDen", gaDen);
+        model.addAttribute("ngayDi", ngayDi);
+        model.addAttribute("ngayDen", ngayDen);
+
+        List<TauEntity> taus = tauService.getTaus();
+        model.addAttribute("taus", taus);
+        return "chon-ve";
     }
 
     @RequestMapping(value = {"/thanh-toan"}, method = RequestMethod.GET)
@@ -71,52 +97,40 @@ public class HomeController {
         return "thanh-cong";
     }
 
-    @RequestMapping(value = {"/chon-ve"}, method = RequestMethod.GET)
-    public String homeChonVe(Model model) {
-
-        List<TauEntity> taus = tauService.getTaus();
-        model.addAttribute("taus", taus);
-        return "chon-ve";
-    }
-
     @RequestMapping(value = {"/kiem-tra-ve"}, method = RequestMethod.GET)
     public String kiemTraVe(Model model) {
-        List<NhaGaEntity> nhaGa = nhaGaService.getNhaGas();
         List<TauEntity> tau = tauService.getTaus();
-        
-        model.addAttribute("nhaGa", nhaGa);
         model.addAttribute("tau", tau);
         return "kiem-tra-ve";
     }
 
-    @RequestMapping(value = {"/gio-tau-gia-ve"}, method = RequestMethod.GET)
-    public String gioTauGiaVe(Model model) {
-        List<LichTrinhEntity> lichTrinh = lichTrinhService.getLichTrinhs();
-        List<NhaGaEntity> nhaGa = nhaGaService.getNhaGas();
-        List<NhaGaEntity> nhaGaHaNoi = nhaGa;
-        List<NhaGaEntity> nhaGaSaiGon = nhaGa;
-        List<LichTrinhEntity> lichTrinhHaNoi = new ArrayList<>();
-        List<LichTrinhEntity> lichTrinhSaiGon = new ArrayList<>();
-        int check = 0;
-        for (LichTrinhEntity lichTrinhEntity : lichTrinh) {
-            String cString = lichTrinhEntity.getTau().getTenTau();
-            for (int i = 0; i < cString.length(); i++) {
-                if ((cString.charAt(i) <= '9') && (cString.charAt(i) >= '0')) {
-                    check = check * 10 + cString.charAt(i) - 48;
-                }
+    @RequestMapping(value = {"/ket-qua-kiem-tra"}, method = RequestMethod.GET)
+    public String ketQuaKiemTra(Model model,
+            @RequestParam("maVe") String maVe,
+            @RequestParam("soGiayTo") String soGiayTo) {
+        List<TauEntity> tau1 = tauService.getTaus();
+        List<VeTauEntity> veTaus = veTauService.findAllTicketByCode(maVe);
+        VeTauEntity ticketEntity = null;
+        for (VeTauEntity ticket : veTaus) {
+            if (ticket.getMaSoNhanThan().equalsIgnoreCase(soGiayTo)) {
+                ticketEntity = ticket;
             }
-            if (check % 2 == 0) {
-                lichTrinhHaNoi.add(lichTrinhEntity);
-                System.out.println("Ha Noi");
-            } else {
-                lichTrinhSaiGon.add(lichTrinhEntity);
-            }
-            check = 0;
         }
-        model.addAttribute("nhaGaHaNoi", nhaGaHaNoi);
-        model.addAttribute("lichTrinhHaNoi", lichTrinhHaNoi);
-        model.addAttribute("nhaGaSaiGon", nhaGaSaiGon);
-        model.addAttribute("lichTrinhSaiGon", lichTrinhSaiGon);
+        if (ticketEntity == null) {
+            model.addAttribute("errorMessages", "Vé Không Tồn Tại");
+        }
+        model.addAttribute("ticketEntity", ticketEntity);
+        return "ket-qua-kiem-tra";
+    }
+
+    @RequestMapping(value = {"/gio-tau-gia-ve"}, method = RequestMethod.GET)
+    public String gioTauGiaVe(Model model,
+            @RequestParam(value = "trainName", required = false) String trainName) {
+        List<TauEntity> trains = tauService.getTaus();
+        TauEntity train = tauService.getTrain(trainName);
+        LichTrinhEntity schedule = lichTrinhService.getSchedule(train);
+        model.addAttribute("trains", trains);
+        model.addAttribute("schedule", schedule);
         return "gio-tau-gia-ve";
     }
 

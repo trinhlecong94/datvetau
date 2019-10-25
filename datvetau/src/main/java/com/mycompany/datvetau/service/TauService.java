@@ -17,4 +17,8 @@ public class TauService {
         return (List<TauEntity>) tauRepository.findAll();
     }
 
+    public TauEntity getTrain(String tenTau) {
+        return tauRepository.findTrainByName(tenTau);
+    }
+
 }

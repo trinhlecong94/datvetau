@@ -10,36 +10,48 @@
     <body>
         <jsp:include page="../jsp/include/nav.jsp"/>
 
-
         <div class="container col-8">
             <h1>Thông tin hành trình</h1>
-            <form>
+            <form action="chon-ve" method="GET">
                 <div class="row">
                     <div class="form-group">
-                        <input type="radio" name="age" value="30"> Khứ hồi
-                        <input type="radio" name="age" value="60"> Một Chiều<br>
+                        <input type="radio" name="loaiVe" value="khuHoi"> Khứ hồi
+                        <input type="radio" name="loaiVe" value="motChieu"> Một Chiều<br>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm">
-
                         <div class="form-group">
-                            <label for="exampleInputPassword1">Ga đi</label>
-                            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Nhập mã ga đi">
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Ga đi</label>
+                                <input class="form-control" list="browsers2" name="gaDi">
+                                <datalist id="browsers2">
+                                    <c:forEach var="ga" items="${nhaGa}">
+                                        <option value="${ga.tenNhaGa}"> 
+                                        </c:forEach>
+                                </datalist>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputPassword1">Ga đên</label>
-                            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Nhập mã ga đến">
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Ga đến</label>
+                                <input class="form-control" list="browsers2" name="gaDen">
+                                <datalist id="browsers2">
+                                    <c:forEach var="ga" items="${nhaGa}">
+                                        <option value="${ga.tenNhaGa}"> 
+                                        </c:forEach>
+                                </datalist>
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm">
                         <div class="form-group">
                             <label for="exampleInputPassword1">Ngày đi</label>
-                            <input type="date" class="form-control" id="exampleInputPassword1" placeholder="Nhập Ngày Đi">
+                            <input type="date" class="form-control" name="ngayDi" id="exampleInputPassword1" placeholder="Nhập Ngày Đi">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Ngày về</label>
-                            <input type="date" class="form-control" id="exampleInputPassword1" placeholder="Nhập Ngày về">
+                            <input type="date" class="form-control" name="ngayVe" id="exampleInputPassword1" placeholder="Nhập Ngày về">
                         </div>
 
                     </div>

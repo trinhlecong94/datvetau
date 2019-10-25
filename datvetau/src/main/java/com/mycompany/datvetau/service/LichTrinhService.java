@@ -1,6 +1,7 @@
 package com.mycompany.datvetau.service;
 
 import com.mycompany.datvetau.entities.LichTrinhEntity;
+import com.mycompany.datvetau.entities.TauEntity;
 import com.mycompany.datvetau.repository.LichTrinhRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,10 @@ public class LichTrinhService {
 
     public List<LichTrinhEntity> getLichTrinhs() {
         return (List<LichTrinhEntity>) lichTrinhRepository.findAll();
+    }
+
+    public LichTrinhEntity getSchedule(TauEntity train) {
+        return lichTrinhRepository.findSchedulebyTrain(train);
     }
 
 }
