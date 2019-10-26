@@ -1,21 +1,23 @@
 package com.mycompany.datvetau.controller;
 
-import com.mycompany.datvetau.entities.LichTrinhEntity;
-import com.mycompany.datvetau.entities.NhaGaEntity;
-import com.mycompany.datvetau.entities.TauEntity;
-import com.mycompany.datvetau.entities.VeTauEntity;
-import com.mycompany.datvetau.service.LichTrinhService;
-import com.mycompany.datvetau.service.NhaGaService;
-import com.mycompany.datvetau.service.TauService;
-import com.mycompany.datvetau.service.VeTauService;
-import static java.lang.Integer.max;
+import com.mycompany.datvetau.entities.CarriageTrainEntity;
+import com.mycompany.datvetau.entities.ScheduleEntity;
+import com.mycompany.datvetau.entities.SeatEntity;
+import com.mycompany.datvetau.entities.StationEntity;
+import com.mycompany.datvetau.entities.TrainEntity;
+import com.mycompany.datvetau.entities.TicketEntity;
+import com.mycompany.datvetau.entities.TrainArrivalTimeEntity;
+import com.mycompany.datvetau.service.ScheduleService;
+import com.mycompany.datvetau.service.SeatService;
+import com.mycompany.datvetau.service.StationService;
+import com.mycompany.datvetau.service.TrainService;
+import com.mycompany.datvetau.service.TicketService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,92 +29,168 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class HomeController {
 
     @Autowired
-    private LichTrinhService lichTrinhService;
+    private ScheduleService scheduleService;
 
     @Autowired
-    private TauService tauService;
+    private TrainService trainService;
 
     @Autowired
-    private NhaGaService nhaGaService;
+    private StationService stationService;
 
     @Autowired
-    private VeTauService veTauService;
+    private TicketService ticketService;
+
+    @Autowired
+    private SeatService seatService;
 
     @RequestMapping(value = {"/", "/trang-chu"}, method = RequestMethod.GET)
     public String homePage(Model model) {
-        List<NhaGaEntity> nhaGa = nhaGaService.getNhaGas();
-        model.addAttribute("nhaGa", nhaGa);
+        List<StationEntity> stations = stationService.findAllStation();
+        model.addAttribute("stations", stations);
         return "trang-chu";
     }
 
     @RequestMapping(value = {"/chon-ve"}, method = RequestMethod.GET)
-    public String homeChonVe(Model model,
-            @RequestParam("loaiVe") String loaiVe,
-            @RequestParam("gaDi") String gaDi,
-            @RequestParam("gaDen") String gaDen,
-            @RequestParam("ngayDi") String ngayDi,
-            @RequestParam("ngayVe") String ngayDen) {
+    public String chooseTicket(Model model, HttpSession session,
+            @RequestParam("typeTicket") String typeTicket,
+            @RequestParam("fromStation") String fromStation,
+            @RequestParam("toStation") String toStation,
+            @RequestParam("departureDate") String departureDate,
+            @RequestParam("returnDate") String returnDate) {
+        session.setAttribute("typeTicket", typeTicket);
+        session.setAttribute("fromStation", fromStation);
+        session.setAttribute("toStation", toStation);
+        session.setAttribute("departureDate", departureDate);
+        session.setAttribute("returnDate", returnDate);
 
-        model.addAttribute("loaiVe", loaiVe);
-        model.addAttribute("gaDi", gaDi);
-        model.addAttribute("gaDen", gaDen);
-        model.addAttribute("ngayDi", ngayDi);
-        model.addAttribute("ngayDen", ngayDen);
+        // tìm tàu thỏa điều kiện có ga đến và đi
+        TrainEntity toStationEntity = trainService.findTrainByName(toStation);
+        TrainEntity fromStationEntity = trainService.findTrainByName(fromStation);
+        List<ScheduleEntity> scheduleEntity = scheduleService.findScheduleByDate(java.sql.Date.valueOf(departureDate));
 
-        List<TauEntity> taus = tauService.getTaus();
-        model.addAttribute("taus", taus);
+        List<TrainEntity> trains = new ArrayList<>();
+        for (ScheduleEntity schedule : scheduleEntity) {
+            List<TrainArrivalTimeEntity> trainArrivalTimes = schedule.getTrain().getTrainArrivalTime();
+            int temp = 0;
+            int index = 1;
+            int noFromStation = Integer.MAX_VALUE;
+            int noToStation = Integer.MIN_VALUE;
+            for (TrainArrivalTimeEntity trainArrivalTime : trainArrivalTimes) {
+                if (trainArrivalTime.getStation().getStationName() == null ? fromStation == null : trainArrivalTime.getStation().getStationName().equals(fromStation)) {
+                    temp += 1;
+                    noFromStation = index;
+                }
+                if (trainArrivalTime.getStation().getStationName() == null ? toStation == null : trainArrivalTime.getStation().getStationName().equals(toStation)) {
+                    temp += 1;
+                    noToStation = index;
+                }
+                index += 1;
+            }
+
+            if (noFromStation < noToStation) {
+                List<CarriageTrainEntity> carriageTrains = schedule.getTrain().getCarriageTrains();
+                for (CarriageTrainEntity carriageTrain : carriageTrains) {
+                    List<SeatEntity> seats = carriageTrain.getSeats();
+                    for (SeatEntity seat : seats) {
+                        seat.setStatus(true);
+                        List<TicketEntity> tickets = ticketService.findAllTicketByDateAndSeat(java.sql.Date.valueOf(departureDate), seat);
+                        for (TicketEntity ticket : tickets) {
+                            int index_1 = 1;
+                            int noFromStation_1 = Integer.MAX_VALUE;
+                            int noToStation_1 = Integer.MIN_VALUE;
+                            for (TrainArrivalTimeEntity trainArrivalTime : trainArrivalTimes) {
+                                if (trainArrivalTime.getStation().getStationName().equals(ticket.getFromSation().getStationName())) {
+                                    noFromStation_1 = index_1;
+                                }
+                                if (trainArrivalTime.getStation().getStationName().equals(ticket.getToStation().getStationName())) {
+                                    noToStation_1 = index_1;
+                                }
+                                index_1 += 1;
+                            }
+                            if (((noFromStation < noFromStation_1) && (noFromStation_1 < noToStation))
+                                    || ((noFromStation < noToStation_1) && (noFromStation_1 < noToStation_1))) {
+                                seat.setStatus(false);
+                            }
+                        }
+                    }
+                }
+                trains.add(schedule.getTrain());
+            }
+        }
+        model.addAttribute("trains", trains);
         return "chon-ve";
     }
 
     @RequestMapping(value = {"/thanh-toan"}, method = RequestMethod.GET)
-    public String thanhToan(Model model, @RequestParam("vitri") String[] ghe, @RequestParam("tau") String tau, @RequestParam("toa") String toa) {
-        if (ghe != null) {
-            model.addAttribute("ghe", ghe);
-            model.addAttribute("tau", tau);
-            model.addAttribute("toa", toa);
+    public String paymentPage(Model model,
+            @RequestParam("seatsID") String[] seatsID,
+            @RequestParam("train") String train,
+            @RequestParam("carriageTrain") String carriageTrain) {
+        if (seatsID != null) {
+            model.addAttribute("seatsID", seatsID);
+            model.addAttribute("train", train);
+            model.addAttribute("carriageTrain", carriageTrain);
             return "thanh-toan";
         }
         return "trang-chu";
     }
 
     @RequestMapping(value = {"/thanh-cong"}, method = RequestMethod.GET)
-    public String thanhCong(Model model, HttpServletResponse response, HttpServletRequest request) {
+    public String paymentSuccessPage(Model model, HttpServletResponse response,
+            HttpServletRequest request,
+            HttpSession session,
+            @RequestParam("seatID") String[] seatID,
+            @RequestParam("fullName") String[] fullName,
+            @RequestParam("identityNumber") String[] identityNumber) {
+
         Cookie[] cookies = request.getCookies();
+        long code = 0;
         boolean checkCookie = false;
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("code")) {
+                    code = Long.parseLong(cookie.getValue());
                     model.addAttribute("code", cookie.getValue());
                     checkCookie = true;
                 }
             }
         }
         if (!checkCookie) {
-            long code = (int) ((Math.random() * ((999999999 - 100000000) + 1)) + 100000000);
+            code = (int) ((Math.random() * ((999999999 - 100000000) + 1)) + 100000000);
             Cookie ck = new Cookie("code", Long.toString(code));
             ck.setMaxAge(30 * 60);
             response.addCookie(ck);
             model.addAttribute("code", code);
         }
+        for (int i = 0; i < identityNumber.length; i++) {
+            TicketEntity ticket = new TicketEntity();
+            ticket.setCode(String.valueOf(code));
+            ticket.setFullName(fullName[i]);
+            ticket.setIdentityNumber(identityNumber[i]);
+            ticket.setSeat(seatService.findSeatById(Integer.parseInt(seatID[i])));
+            java.sql.Date d = java.sql.Date.valueOf((String) session.getAttribute("departureDate"));
+            ticket.setDepartureTime(d);
+            ticket.setToStation(stationService.findStationByName((String) session.getAttribute("toStation")));
+            ticket.setFromSation(stationService.findStationByName((String) session.getAttribute("fromStation")));
+            ticketService.saveTicket(ticket);
+        }
         return "thanh-cong";
     }
 
     @RequestMapping(value = {"/kiem-tra-ve"}, method = RequestMethod.GET)
-    public String kiemTraVe(Model model) {
-        List<TauEntity> tau = tauService.getTaus();
-        model.addAttribute("tau", tau);
+    public String checkTicketPage(Model model) {
         return "kiem-tra-ve";
     }
 
     @RequestMapping(value = {"/ket-qua-kiem-tra"}, method = RequestMethod.GET)
-    public String ketQuaKiemTra(Model model,
-            @RequestParam("maVe") String maVe,
-            @RequestParam("soGiayTo") String soGiayTo) {
-        List<TauEntity> tau1 = tauService.getTaus();
-        List<VeTauEntity> veTaus = veTauService.findAllTicketByCode(maVe);
-        VeTauEntity ticketEntity = null;
-        for (VeTauEntity ticket : veTaus) {
-            if (ticket.getMaSoNhanThan().equalsIgnoreCase(soGiayTo)) {
+    public String resultCheckTicketPage(Model model,
+            @RequestParam("code") String code,
+            @RequestParam("identityNumber") String identityNumber) {
+        List<TrainEntity> train = trainService.findAllTrain();
+        List<TicketEntity> tickets = ticketService.findAllTicketByCode(code);
+        TicketEntity ticketEntity = null;
+        for (TicketEntity ticket : tickets) {
+            if (ticket.getIdentityNumber().equalsIgnoreCase(identityNumber)) {
                 ticketEntity = ticket;
             }
         }
@@ -124,33 +202,33 @@ public class HomeController {
     }
 
     @RequestMapping(value = {"/gio-tau-gia-ve"}, method = RequestMethod.GET)
-    public String gioTauGiaVe(Model model,
+    public String schedulePage(Model model,
             @RequestParam(value = "trainName", required = false) String trainName) {
-        List<TauEntity> trains = tauService.getTaus();
-        TauEntity train = tauService.getTrain(trainName);
-        LichTrinhEntity schedule = lichTrinhService.getSchedule(train);
+        List<TrainEntity> trains = trainService.findAllTrain();
+        TrainEntity train = trainService.findTrainByName(trainName);
         model.addAttribute("trains", trains);
-        model.addAttribute("schedule", schedule);
+        model.addAttribute("train", train);
         return "gio-tau-gia-ve";
     }
 
     @RequestMapping(value = {"/khuyen-mai"}, method = RequestMethod.GET)
-    public String khuyenMai(Model model) {
+    public String promotionPage(Model model) {
         return "khuyen-mai";
     }
 
     @RequestMapping(value = {"/cac-qui-dinh"}, method = RequestMethod.GET)
-    public String cacQuyDinh(Model model) {
+    public String regulationsPage(Model model) {
         return "cac-qui-dinh";
     }
 
     @RequestMapping(value = {"/huong-dan"}, method = RequestMethod.GET)
-    public String huongDan(Model model) {
+    public String InstructionPage(Model model) {
         return "huong-dan";
     }
 
     @RequestMapping(value = {"lien-he"}, method = RequestMethod.GET)
-    public String lienHe(Model model) {
+    public String contactPage(Model model
+    ) {
         return "lien-he";
     }
 }

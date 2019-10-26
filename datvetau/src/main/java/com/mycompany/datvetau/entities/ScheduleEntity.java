@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.hibernate.annotations.LazyCollection;
@@ -18,7 +19,8 @@ import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-public class LichTrinhEntity implements Serializable {
+@Table(name = "schedule")
+public class ScheduleEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,19 +29,14 @@ public class LichTrinhEntity implements Serializable {
     @ManyToOne
     @LazyCollection(LazyCollectionOption.FALSE)
     @JoinColumn(nullable = false)
-    private TauEntity tau;
-
-    @OneToMany
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @Column(nullable = false)
-    private List<GioTauChayEntity> gioTauChays;
+    private TrainEntity train;
 
     @DateTimeFormat(pattern = "yyyy-mm-dd hh.mm.ss")
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
-    private Date gioKhoiHanh;
+    private Date departureTime;
 
-    public LichTrinhEntity() {
+    public ScheduleEntity() {
     }
 
     public int getId() {
@@ -50,29 +47,20 @@ public class LichTrinhEntity implements Serializable {
         this.id = id;
     }
 
-    public TauEntity getTau() {
-        return tau;
+    public TrainEntity getTrain() {
+        return train;
     }
 
-    public void setTau(TauEntity tau) {
-        this.tau = tau;
+    public void setTrain(TrainEntity train) {
+        this.train = train;
     }
 
-    public Date getGioKhoiHanh() {
-        return gioKhoiHanh;
+    public Date getDepartureTime() {
+        return departureTime;
     }
 
-    public void setGioKhoiHanh(Date gioKhoiHanh) {
-        this.gioKhoiHanh = gioKhoiHanh;
+    public void setDepartureTime(Date departureTime) {
+        this.departureTime = departureTime;
     }
-
-    public void setGioTauChays(List<GioTauChayEntity> gioTauChays) {
-        this.gioTauChays = gioTauChays;
-    }
-
-    public List<GioTauChayEntity> getGioTauChays() {
-        return gioTauChays;
-    }
-    
 
 }

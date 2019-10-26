@@ -1,14 +1,14 @@
 package com.mycompany.datvetau.service;
 
-import com.mycompany.datvetau.repository.TrangThaiGheRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
+import com.mycompany.datvetau.repository.AdministratorsRepository;
 
 @Service
-public class TrangThaiGheService {
+public class AdministratorsService {
 
     @Autowired
-    private TrangThaiGheRepository trangThaiGheRepository;
+    private AdministratorsRepository administratorsRepository;
 
 }

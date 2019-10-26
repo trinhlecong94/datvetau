@@ -26,28 +26,28 @@
                         <td colspan="2">Thông Tin Vé Của Quý Khách</td>
                     </tr>
                     <tr>
+                        <td>Tên Khách Hàng</td>
+                        <td>${ticketEntity.fullName}</td>
+                    </tr>
+                    <tr>
                         <td>Ngày Khởi Hành</td>
-                        <td>${ticketEntity.ngayKhoiHanh}</td>
+                        <td>${ticketEntity.departureTime}</td>
                     </tr>
                     <tr>
                         <td>Mã Số Nhân Thân</td>
-                        <td>${ticketEntity.maSoNhanThan}</td>
+                        <td>${ticketEntity.identityNumber}</td>
                     </tr>
                     <tr>
                         <td>Ga Khởi Hành</td>
-                        <td>${ticketEntity.gaKhoiHanh.tenNhaGa}</td>
+                        <td>${ticketEntity.fromSation.stationName}</td>
                     </tr>
                     <tr>
                         <td>Ga Đến</td>
-                        <td>${ticketEntity.gaDen.tenNhaGa}</td>
+                        <td>${ticketEntity.toStation.stationName}</td>
                     </tr>
                     <tr>
                         <td>Mã Số Ghế Ngồi</td>
-                        <td>${ticketEntity.gheNgoi.tenGheNgoi}</td>
-                    </tr>
-                    <tr>
-                        <td>Tên Khách Hàng</td>
-                        <td>${ticketEntity.tenKhachHang}</td>
+                        <td>${ticketEntity.seat.seatName}</td>
                     </tr>
                 </table>
             </c:if>

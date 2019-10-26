@@ -1,14 +1,14 @@
 package com.mycompany.datvetau.service;
 
-import com.mycompany.datvetau.repository.GioTauChayRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
+import com.mycompany.datvetau.repository.TrainArrivalTimeRepository;
 
 @Service
-public class GioTauChayService {
+public class TrainArrivalTimeService {
 
     @Autowired
-    private GioTauChayRepository gioTauChayRepository;
+    private TrainArrivalTimeRepository trainArrivalTimeRepository;
 
 }

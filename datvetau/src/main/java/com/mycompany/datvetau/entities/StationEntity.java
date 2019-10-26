@@ -6,23 +6,23 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-public class NhaGaEntity implements Serializable {
+@Table(name = "sation")
+public class StationEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(nullable = false)
-    private String tenNhaGa;
+    private String stationName;
 
     @Column(nullable = false)
-    private String diaChi;
+    private String address;
 
-    private double khoangCach;
-
-    public NhaGaEntity() {
+    public StationEntity() {
     }
 
     public int getId() {
@@ -33,20 +33,21 @@ public class NhaGaEntity implements Serializable {
         this.id = id;
     }
 
-    public String getTenNhaGa() {
-        return tenNhaGa;
+    public String getStationName() {
+        return stationName;
     }
 
-    public void setTenNhaGa(String tenNhaGa) {
-        this.tenNhaGa = tenNhaGa;
+    public void setStationName(String stationName) {
+        this.stationName = stationName;
     }
 
-    public String getDiaChi() {
-        return diaChi;
+    public String getAddress() {
+        return address;
     }
 
-    public void setDiaChi(String diaChi) {
-        this.diaChi = diaChi;
+    public void setAddress(String address) {
+        this.address = address;
     }
+
 
 }

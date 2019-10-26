@@ -13,25 +13,26 @@
     <body>
         <jsp:include page="../jsp/include/nav.jsp"/>
 
-        <div>${loaiVe}</div>
-        <div>${gaDi}</div>
-        <div>${gaDen}</div>
-        <div>${ngayDi}</div>
-        <div>${ngayDen}</div>
+        <div>${typeTicket}</div>
+        <div>${fromStation}</div>
+        <div>${toStation}</div>
+        <div>${departureDate}</div>
+        <div>${returnDate}</div>
 
         <form action="thanh-toan" method="GET">
             <div>Tên Tàu</div>
-            <c:forEach var="tau" items="${taus}">
-                <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#demo${tau.tenTau}">${tau.tenTau}</button>
-                <div id="demo${tau.tenTau}" class="collapse">
-                    <c:forEach var="toaTau" items="${tau.toaTaus}">
-                        <button type="button" class="btn btn-dark" data-toggle="collapse" data-target="#demo2${toaTau.status}">${toaTau.status}</button>
-                        <div id="demo2${toaTau.status}" class="collapse">
-                            <c:forEach var="gheNgoi" items="${toaTau.gheNgoiEntitys}">
+            <c:forEach var="train" items="${trains}">
+                <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#demo${train.trainName}">${train.trainName}</button>
+                <div id="demo${train.trainName}" class="collapse">
+                    <c:forEach var="carriageTrain" items="${train.carriageTrains}">
+                        <button type="button" class="btn btn-dark" data-toggle="collapse" data-target="#demo2${carriageTrain.carriageName}">${carriageTrain.carriageName}</button>
+                        <div id="demo2${carriageTrain.carriageName}" class="collapse">
+                            <c:forEach var="seat" items="${carriageTrain.seats}">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="vitri" value="${gheNgoi.id}" id="defaultCheck1">
+                                    <input class="form-check-input" type="checkbox" name="seatsID" value="${seat.id}" id="defaultCheck1">
                                     <label class="form-check-label" for="defaultCheck1">
-                                        ${gheNgoi.id}
+                                        ${seat.id}
+                                        ${seat.status}
                                     </label>
                                 </div>
                             </c:forEach>
@@ -39,10 +40,9 @@
                     </c:forEach>
                 </div>
             </c:forEach>
-            <input type="hidden" id="custId" name="tau" value="SE1">
-            <input type="hidden" id="custId" name="toa" value="10">
+            <input type="hidden" id="custId" name="train" value="SE1">
+            <input type="hidden" id="custId" name="carriageTrain" value="10">
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-        <h3>Checkbox</h3>
     </body>
 </html>

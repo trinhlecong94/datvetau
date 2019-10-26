@@ -10,7 +10,12 @@
     <body>
         <jsp:include page="../jsp/include/nav.jsp"/>
         <div class="container">
-            <form>
+            <div>${typeTicket}</div>
+            <div>${fromStation}</div>
+            <div>${toStation}</div>
+            <div>${departureDate}</div>
+            <div>${returnDate}</div>
+            <form action="thanh-cong" method="GET">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -24,13 +29,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="ghe" items="${ghe}">
+                        <c:forEach var="seat" items="${seatsID}">
                             <tr>
-                                <td><input type="text" name="ten"></td>
-                                <td><input type="number" name="ten"></td>
+                                <td><input type="text" name="fullName"></td>
+                                <td><input type="number" name="identityNumber"></td>
+                                <td><input type="hidden" name="seatID" value="${seat}"></td>
                                 <td> 
                                     <div class="form-group">
-                                        <select class="form-control" id="exampleFormControlSelect1">
+                                        <select class="form-control">
                                             <option>1</option>
                                             <option>2</option>
                                             <option>3</option>
@@ -39,7 +45,7 @@
                                         </select>
                                     </div>
                                 </td>
-                                <td>${tau} ${toa} ${ghe}</td>
+                                <td>${seat} ${carriageTrain} ${train}</td>
                                 <td>1.754.333.000</td>
                                 <td>1.000</td>
                                 <td>1.754.333.000</td>
@@ -51,9 +57,5 @@
                 <button type="submit" class="btn btn-primary">Thanh Toán</button>
             </form>
         </div>
-
-
-
-
     </body>
 </html>

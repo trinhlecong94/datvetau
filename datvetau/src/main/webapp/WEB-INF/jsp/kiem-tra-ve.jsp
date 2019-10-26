@@ -13,12 +13,12 @@
             <form action="ket-qua-kiem-tra" method="GET">
 
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Mã vé</label>
-                    <input type="number" name="maVe" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nhập mã vé bao gồm 8 hoặc 9 số">
+                    <label for="input-code">Mã vé</label>
+                    <input type="number" name="code" class="form-control" id="input-code" aria-describedby="emailHelp" placeholder="Nhập mã vé bao gồm 8 hoặc 9 số">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword1">Số giấy tờ</label>
-                    <input type="text" name="soGiayTo" class="form-control" id="exampleInputPassword1" placeholder="Nhập giấy tờ các nhân ghi trên vé">
+                    <label for="identity-Number">Số giấy tờ</label>
+                    <input type="text" name="identityNumber" class="form-control" id="identity-Number" placeholder="Nhập giấy tờ các nhân ghi trên vé">
                 </div>
                 <div class="row justify-content-center">                           
                     <button type="submit" class="btn btn-primary">Submit</button>             
