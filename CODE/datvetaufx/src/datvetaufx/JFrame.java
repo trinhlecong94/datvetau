@@ -6,6 +6,7 @@ import com.mycompany.datvetausever.entities.StationEntity;
 import com.mycompany.datvetausever.entities.TrainEntity;
 import datvetaufx.client.Client;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -346,25 +347,28 @@ public class JFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_codeActionPerformed
 
     public static void main(String args[]) throws ClassNotFoundException, SQLException, IOException {
+        try {
+            JFrame jf = new JFrame();
+            jf.fromStation.removeAllItems();
+            List<StationEntity> stations = Client.findStations();
+            stations.forEach((station) -> {
+                jf.fromStation.addItem(station.getStationName());
+            });
 
-        JFrame jf = new JFrame();
-        jf.fromStation.removeAllItems();
-        List<StationEntity> stations = Client.findStations();
-        stations.forEach((station) -> {
-            jf.fromStation.addItem(station.getStationName());
-        });
+            jf.toStation.removeAllItems();
+            stations.forEach((station) -> {
+                jf.toStation.addItem(station.getStationName());
+            });
 
-        jf.toStation.removeAllItems();
-        stations.forEach((station) -> {
-            jf.toStation.addItem(station.getStationName());
-        });
-
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                jf.setVisible(true);
-            }
-        });
-
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    jf.setVisible(true);
+                }
+            });
+        }catch (ConnectException e){
+            System.out.println("Vui long khoi dong server truoc khi chay");
+            
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

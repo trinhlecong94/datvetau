@@ -1,4 +1,3 @@
-//ok
 package com.mycompany.datvetau.entities;
 
 import java.io.Serializable;
@@ -75,4 +74,11 @@ public class TrainArrivalTimeEntity implements Serializable {
         this.station = station;
     }
 
+    public String getTimeFormat() {
+        long s = timeTrain % 60;
+        long m = (timeTrain / 60) % 60;
+        long h = (timeTrain / (60 * 60)) % 24;
+        String time = String.format("%d:%02d:%02d", h, m, s);
+        return time;
+    }
 }

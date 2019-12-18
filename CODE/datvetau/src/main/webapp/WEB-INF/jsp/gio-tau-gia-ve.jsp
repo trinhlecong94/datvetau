@@ -32,7 +32,7 @@
                 </div>
 
                 <div class="col-7 border">
-             
+
                     <c:if test="${size != 0 }">
                         <table class="table table-bordered">
                             <br>
@@ -47,9 +47,11 @@
                             <tbody>
                                 <c:forEach var="time" items="${train.trainArrivalTime}">
                                     <tr>
-                                        <td>${time.noStation}</td>
+                                        <td>${time.noStation}
+                                        </td>
                                         <td>${time.station.stationName}</td>
-                                        <td>${time.timeTrain}</td>
+                                        <td>${time.timeFormat}
+                                        </td>
                                     </tr>
                                 </c:forEach>  
                             </tbody>
