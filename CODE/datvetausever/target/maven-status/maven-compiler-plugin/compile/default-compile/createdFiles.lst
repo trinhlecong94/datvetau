@@ -1,0 +1,14 @@
+com\mycompany\datvetausever\entities\TrainArrivalTimeEntity.class
+com\mycompany\datvetausever\server\Message.class
+com\mycompany\datvetausever\entities\NewClass.class
+com\mycompany\datvetausever\entities\AdministratorsEntity.class
+com\mycompany\datvetausever\server\Server.class
+com\mycompany\datvetausever\entities\enumes\Role.class
+com\mycompany\datvetausever\entities\StationEntity.class
+com\mycompany\datvetausever\entities\AdministratorsRoleEntity.class
+com\mycompany\datvetausever\entities\TrainEntity.class
+com\mycompany\datvetausever\entities\SeatEntity.class
+com\mycompany\datvetausever\entities\ScheduleEntity.class
+com\mycompany\datvetausever\entities\CarriageTrainEntity.class
+com\mycompany\datvetausever\entities\enumes\TrainClasses.class
+com\mycompany\datvetausever\entities\TicketEntity.class
